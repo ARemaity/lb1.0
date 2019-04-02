@@ -22,30 +22,29 @@ if (isset($_GET['fk_client']) && isset($_GET['val'])) {
  $db = new DB_CONNECT();
  
     $checkLastid = mysql_query("SELECT id FROM hour_value ORDER BY id DESC LIMIT 1 ");
-    $value = mysql_fetch_object($checkLastid);
-    $id=$value->id;
+$value = mysql_fetch_object($checkLastid);
+$id=$value->id;
     $a = array(
         'id' => $fk_client,
         'val' =>$val,
         'last' =>$id,
     );
-    if ($id >= 24) {
-        $sumHourQ = mysql_query(" SELECT SUM(val) FROM hour_value;");
-        $sumHour = mysql_fetch_object($sumHourQ);
-        if ($sumHourQ) {
+    #if ($checkLastid >= 24) {
+       # $sumHour = mysql_query(" SELECT SUM(val) FROM hour_value;");
+       # if ($sumHour) {
             // $checkLastidDay=mysql_query("SELECT id FROM day_value ORDER BY id DESC LIMIT 1 ");
             //if( $checkLastidDay>=30){
             // $sumDay = mysql_query(" SELECT SUM(val) FROM day_value;");
             // if($sum){
             //  $insert = mysql_query(" INSERT INTO month_value(fk_client,val,time)  VALUES ($fk_client,$sumDay,day_value");
-           $insert = mysql_query(" INSERT INTO day_value(fk_client,value,dates)  VALUES ('$fk_client','$sumHour','$date'");
-           if ($insert) {
-               $delete = mysql_query("DELETE FROM hour_value");
-               if ($delete) {
-                  $reset = mysql_query("ALTER TABLE `hour_value` AUTO_INCREMENT=1");
-                }
-            }
-        }
+          #  $insert = mysql_query(" INSERT INTO day_value(fk_client,value,dates)  VALUES ('$fk_client','$sumHour','$date'");
+         #   if ($insert) {
+           #     $delete = mysql_query("DELETE FROM hour_value");
+            #    if ($delete) {
+              #      $reset = mysql_query("ALTER TABLE `hour_value` AUTO_INCREMENT=1");
+              #  }
+           # }
+      #  }
 
 
         //$reset=mysql_query("ALTER TABLE `hour_value` AUTO_INCREMENT=1");
@@ -61,7 +60,7 @@ if (isset($_GET['fk_client']) && isset($_GET['val'])) {
       
    // }
 **/
-    } else {
+    #} else {
 
 
 
@@ -80,7 +79,7 @@ if (isset($_GET['fk_client']) && isset($_GET['val'])) {
             // Show JSON response
             echo json_encode($response);
         }
-    }
+   # }
 } else {
     // If required parameter is missing
     $response["success"] = 0;

@@ -48,15 +48,15 @@ if (isset($_GET['fk_client']) && isset($_GET['val'])) {
             //  $insert = mysql_query(" INSERT INTO month_value(fk_client,val,time)  VALUES ($fk_client,$sumDay,day_value");*/
            $insert = mysql_query(" INSERT INTO day_value(fk_client,value,dates)  VALUES ('$fk_client','$sumHour','$date'");
            if ($insert) {
-               $a['insert']=1;
+               $debug['insert']=1;
                $delete = mysql_query("DELETE FROM hour_value");
 
                if ($delete) {
-                $a['delete']=1;
+                $debug['delete']=1;
                   $reset = mysql_query("ALTER TABLE `hour_value` AUTO_INCREMENT=1");
                   if($reset){
 
-                    $a['delete']=1;
+                    $debug['delete']=1;
                   }
                 }
             }

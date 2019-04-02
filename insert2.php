@@ -29,7 +29,8 @@ if (isset($_GET['fk_client']) && isset($_GET['val'])) {
         'id' => $fk_client,
         'val' =>$val,
         'lastStatus' =>0,
-        'insert' =>0,
+        'inserthour'=>0,
+        'insertday' =>0,
         'delete' =>0,
         'reset' =>0,
 
@@ -38,6 +39,11 @@ if (isset($_GET['fk_client']) && isset($_GET['val'])) {
     if($checkLastid){
         $debug['lastStatus']=1;
     //if the id of last auto incremented value 24 or more sum up and insert it to the vlaue of day and reset the id and delete all value
+        $result = mysql_query("INSERT INTO hour_value(fk_client,val) VALUES('$fk_client','$val')");
+        if($result){
+
+            $debug['inserthour']=1;
+        
         if ($id >= 24) {
         $sumHourQ = mysql_query(" SELECT SUM(val) as sum FROM hour_value;");
         $sumHour = mysql_fetch_object($sumHourQ);
@@ -50,7 +56,7 @@ if (isset($_GET['fk_client']) && isset($_GET['val'])) {
             //  $insert = mysql_query(" INSERT INTO month_value(fk_client,val,time)  VALUES ($fk_client,$sumDay,day_value");*/
            $insert = mysql_query(" INSERT INTO day_value(fk_client,value,dates)  VALUES ('$fk_client','$sumHour','$date'");
            if ($insert) {
-               $debug['insert']=1;
+               $debug['insertday']=1;
                $delete = mysql_query("DELETE FROM hour_value");
 
                if ($delete) {
@@ -58,7 +64,7 @@ if (isset($_GET['fk_client']) && isset($_GET['val'])) {
                   $reset = mysql_query("ALTER TABLE `hour_value` AUTO_INCREMENT=1");
                   if($reset){
 
-                    $debug['delete']=1;
+                    $debug['reset']=1;
                   }
                 }
             }
@@ -79,14 +85,14 @@ if (isset($_GET['fk_client']) && isset($_GET['val'])) {
     }
     */
 
-    } 
+        } 
   
-    
+    }  
 }
 
 
 /*
-        #$result = mysql_query("INSERT INTO hour_value(fk_client,val) VALUES('$fk_client','$val')");
+        $result = mysql_query("INSERT INTO hour_value(fk_client,val) VALUES('$fk_client','$val')");
 
         if ($checkLastid) {
 

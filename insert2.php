@@ -21,9 +21,9 @@ if (isset($_GET['fk_client']) && isset($_GET['val'])) {
  // Connecting to database 
  $db = new DB_CONNECT();
  
-    $checkLastid = mysql_query("SELECT id FROM hour_value ORDER BY id DESC LIMIT 1 ");
+    $checkLastid = mysql_query("SELECT SUM(val) FROM hour_value;");
 $value = mysql_fetch_object($checkLastid);
-$id=$value->id;
+$id=$value->SUM(val);
     $a = array(
         'id' => $fk_client,
         'val' =>$val,

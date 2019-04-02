@@ -19,11 +19,19 @@ if (isset($_GET['fk_client']) && isset($_GET['val'])) {
 
  // Connecting to database 
  $db = new DB_CONNECT();
+<<<<<<< HEAD
  //check last id by the query and get it by tranforming it to object 
     $checkLastid = mysql_query("SELECT id FROM hour_value ORDER BY id DESC LIMIT 1 ");
     $value = mysql_fetch_object($checkLastid);
     $id=$value->id;
     $debug = array(
+=======
+ 
+    $checkLastid = mysql_query("SELECT SUM(val) FROM hour_value;");
+$value = mysql_fetch_object($checkLastid);
+$id=$value->SUM(val);
+    $a = array(
+>>>>>>> 7a1c9c996f3678ed3eab2d694d0245f11e493de7
         'id' => $fk_client,
         'val' =>$val,
         'lastStatus' =>0,

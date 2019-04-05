@@ -6,9 +6,9 @@ header("Content-Type: application/json; charset=UTF-8");
 //Creating Array for JSON response
 $response = array();
 date_default_timezone_set("Asia/Beirut");
-$date = date('Y-m-d');
+$dates = date('Y-m-d');
 //$dts=strlen($date);
-$dts='1999-12-02';
+//$dts='1999-12-02';   //..there is problem with dates so we use 1999 as example
 // Check if we got the field from the user
 if (isset($_GET['fk_client']) && isset($_GET['val'])) {
 
@@ -51,7 +51,7 @@ if (isset($_GET['fk_client']) && isset($_GET['val'])) {
                 $sumHour = mysql_fetch_object($sumHourQ);
                 $sum = $sumHour->sums;
                 if ($sumHourQ) {
-                    $insert = mysql_query(" INSERT INTO day_value(fk_client,value,dates)  VALUES ('" . $fk_client . "','" . $sum . "','" . $dts . "')") or die(mysql_error());
+                    $insert = mysql_query(" INSERT INTO day_value(fk_client,value,dates)  VALUES ('" . $fk_client . "','" . $sum . "','" . $dates . "')") or die(mysql_error());
                     if ($insert) {
                         $debug['insertday'] = 1;
                         $delete = mysql_query("DELETE FROM hour_value");

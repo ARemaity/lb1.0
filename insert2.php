@@ -48,7 +48,12 @@ if (isset($_GET['fk_client']) && isset($_GET['val'])) {
             // $sumDay = mysql_query(" SELECT SUM(val) FROM day_value;");
             // if($sum){
             //  $insert = mysql_query(" INSERT INTO month_value(fk_client,val,time)  VALUES ($fk_client,$sumDay,day_value");*/
-           $insert = mysql_query(" INSERT INTO day_value(fk_client,value,dates)  VALUES ('$fk_client','$sumHour','$date'");
+
+            /*mysql_query("INSERT INTO data_table (title, date_of_event)
+               VALUES('" . $_POST['post_title'] . "',
+                      '" . $date . "')") 
+           or die(mysql_error());*/
+           $insert = mysql_query(" INSERT INTO day_value(fk_client,value,dates)  VALUES ('".$fk_client."','".$sumHour."','".$date. "')");
            if ($insert) {
                $debug['insert']=1;
                $delete = mysql_query("DELETE FROM hour_value");

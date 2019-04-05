@@ -55,6 +55,13 @@ if (isset($_GET['fk_client']) && isset($_GET['val'])) {
             // if($sum){
             //  $insert = mysql_query(" INSERT INTO month_value(fk_client,val,time)  VALUES ($fk_client,$sumDay,day_value");*/
            $insert = mysql_query(" INSERT INTO day_value(fk_client,value,dates)  VALUES ('$fk_client','$sumHour','$date'");
+          
+          /*
+
+
+          //there is error need to resolve with syntx of date with php error:
+        //Catchable fatal error: Object of class stdClass could not be converted to string in /storage/ssd1/783/8992783/public_html/api/insert2.php on line 57
+          */ 
            if ($insert) {
                $debug['insertday']=1;
                $delete = mysql_query("DELETE FROM hour_value");

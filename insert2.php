@@ -45,6 +45,8 @@ if (isset($_GET['fk_client']) && isset($_GET['val'])) {
         'inserthour' => 0,
         'API.day'=>0,
         
+DNS_AAAA
+
 
     );
 

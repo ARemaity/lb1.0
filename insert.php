@@ -14,7 +14,11 @@ if ( isset($_GET['fk_client'])&&isset($_GET['val'])) {
     // Include data base connect class
     $filepath = realpath (dirname(__FILE__));
 	require_once($filepath."/db_connect.php");
- 
+
+    //////
+
+
+    
  
     // Connecting to database 
     $db = new DB_CONNECT();

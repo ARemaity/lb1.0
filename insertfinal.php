@@ -35,10 +35,12 @@ if (isset($_GET['fk_client']) && isset($_GET['val'])) {
     $forcum=$val;
     // Include data base connect class
 
-    // Connecting to database 
+    
+    
+    
     $getdata = mysqli_query($conn, "SELECT value FROM  Cumulative ");
     if (mysqli_num_rows($getdata)==0) {
-        $insert= mysqli_query($conn,"INSERT INTO Cumulative(fk_client,value)  VALUES ('" . $fk_client . "','" . $val . "')") or die(mysqli_error($conn));
+        $insert= mysqli_query($conn,"INSERT INTO Cumulative(fk_id,value)  VALUES ('" . $fk_client . "','" . $val . "')") or die(mysqli_error($conn));
 
     }
 else{
@@ -129,9 +131,15 @@ else{
 
                                     $reset = mysqli_query($conn, "ALTER TABLE `day_value` AUTO_INCREMENT=1");
                                     if ($reset) {
-
-                                        $delete = mysqli_query($conn, "DELETE * FROM  Cumulative WHERE fk_id ='".$fk_client."'");
-                                        $debug['API.month'] = 1;
+                                        
+                                        $delete = mysqli_query($conn, "DELETE  FROM  Cumulative WHERE fk_id ='".$fk_client."'");
+                                        $cost1kw = "SELECT  `cost_1kw` FROM `supplier` INNER JOIN `client` on  client.fk_supplier = supplier.id  WHERE id=". $fk_client ;
+                                          $result= mysqli_query($conn,$cost1kw);
+                                             $cum = mysqli_fetch_object($result);
+                                             $get1kw  = (int)$cum->cost_1kw;
+                                             $total=$get1kw*$fsumDay;
+                                            $insertDay = mysqli_query($conn, " INSERT INTO payment(fk_client,balance,payment_st,issued_date)  VALUES ('" . $fk_client . "','" . $total . "','0','" . $dates . "')") or die(mysqli_error($conn));
+                                            $debug['API.month'] = 1;
                                     }
                                 }
                             }

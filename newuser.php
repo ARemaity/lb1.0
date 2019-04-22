@@ -2,6 +2,7 @@
 
 
 <?php 
+
 $servername = "localhost";
 $username = "root";
 $password ="";
@@ -22,7 +23,7 @@ if ($conn->connect_error) {
 //if ($_SERVER["REQUEST_METHOD"] == "POST") {
   
  
-
+$PID=$_POST["uid"];
   
  $fname=  $_POST["fname"];
 
@@ -31,8 +32,14 @@ if ($conn->connect_error) {
  $phone= $_POST["phone"];
   $city= $_POST["city"];
  //$id=  $_POST["id"];
- //TODO:get uid and send it throgh ajax 
+ //DONE:get uid and send it throgh ajax 
  //TODO:get PID From session and insert in to Client tbl
+
+ //...  
+//as example pid is 0 it should be taken from the session;
+$fk_supplier=1;
+ //
+
  $street=  $_POST["street"];
  $email=  $_POST["email"]; 
  // $password= $_POST["password"];
@@ -42,8 +49,8 @@ if ($conn->connect_error) {
 
  $role=0;
  $insert = mysqli_query($conn, " INSERT INTO person (role,fname,lname,city,street,phone,email)  VALUES ('" . $role . "','" . $fname . "','" . $lname ."','" . $city ."','" . $street ."','" . $phone . "','" . $email ."')");
- $insertClient = mysqli_query($conn, " INSERT INTO person (role,fname,lname,city,street,phone,email)  VALUES ('" . $role . "','" . $fname . "','" . $lname ."','" . $city ."','" . $street ."','" . $phone . "','" . $email ."')");
-if($insert){
+ $insertClient = mysqli_query($conn, " INSERT INTO client (PID,fkSupplier)  VALUES ('" . $PID . "','" . $fk_supplier ."')");
+if($insert&&$insertClient){
 
    echo "USER successfull inserted";
 

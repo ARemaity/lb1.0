@@ -1,5 +1,4 @@
-var errorExist = "FALSE";
-
+var uid;
 
 //TODO:get uid for the new added user
 
@@ -24,46 +23,37 @@ document.getElementById("register").addEventListener("click", function () {
 
   } else {
 
+    firebase.auth().createUserWithEmailAndPassword(email, password)
+    .then(function success(userData){
+        console.log("it enter hahaha")
+          uid=userData.uid;
+          var xhr = new XMLHttpRequest();
+
+          xhr.onload = function () {
+    
+            window.alert(this.responseText);
+          };
+          xhr.open("POST", 'http://localhost/lb1.0/lb1.0/newuser.php', true);
+    
+          //Send the proper header information along with the request
+          xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+          xhr.send("uid="+uid+"&fname=" + fname + "&lname=" + lname + "&phone=" + phone + "&city=" + city + "&street=" + street + "&email=" + email);
+          
     // window.alert(city+" "+street+" "+phone+" "+fname+" "+lname);
-    auth.createUserWithEmailAndPassword(email, password).catch(function (error) {
+    }).catch(function (error) {
       // Handle Errors here.
 
-      errorExist = "TRUE";
-console.log("first error is "+errorExist);
+      //errorExist = "TRUE";
+console.log("she enter the error field");
       var errorCode = error.code;
       var errorMessage = error.message;
       window.alert("Error : " + errorMessage);
       location.reload();     // ...
     });
 
-    window.setTimeout(insert,1000);
-    /////////////////
-    //var user=firebase.auth().currentUser;
-    //var id=user.uid;
-    //var str="http://localhost/firebaseWebLogin/newuser.php?id="+io;
-    //window.alert(id);
-function insert(){
-
-    if (errorExist == "FALSE") {
-      console.log("secod error is"+errorExist);
-      var user = firebase.auth().currentUser;
-      //var id = user.uid;
-
-      //  console.log(id);
-      var xhr = new XMLHttpRequest();
-
-      xhr.onload = function () {
-
-        window.alert(this.responseText);
-      };
-      xhr.open("POST", 'http://localhost/lb1.0/lb1.0/newuser.php', true);
-
-      //Send the proper header information along with the request
-      xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-      xhr.send("fname=" + fname + "&lname=" + lname + "&phone=" + phone + "&city=" + city + "&street=" + street + "&email=" + email);
-    }
+   
 }
-  }
+  
 });
 
 

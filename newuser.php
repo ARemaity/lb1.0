@@ -45,10 +45,10 @@ if ($conn->connect_error) {
  $insertClient = mysqli_query($conn, " INSERT INTO person (role,fname,lname,city,street,phone,email)  VALUES ('" . $role . "','" . $fname . "','" . $lname ."','" . $city ."','" . $street ."','" . $phone . "','" . $email ."')");
 if($insert){
 
-   echo "1";
+   echo "USER successfull inserted";
 
 }else{
-    echo"0";
+    echo "there is problem ,repeat the process if return contact support";
 }
  
  

@@ -21,7 +21,7 @@ if(!isset($_SERVER['HTTP_REFERER']))
     </head>
     <body>
 <script>
-    window.location.replace("http://localhost/firebaseWebLogin/ulogin.html");</script>   
+window.location.replace("http://localhost/lb1.0/lb1.0/ulogin.html");</script>   
     </body>
     </html>
         ';   }
@@ -54,7 +54,7 @@ echo "sorry bro";
     
     function logout() {
             firebase.auth().signOut();
-            window.location.replace("http://localhost/firebaseWebLogin/ulogin.html");
+            window.location.replace("http://localhost/lb1.0/lb1.0/ulogin.html");
         }
 </script>
 

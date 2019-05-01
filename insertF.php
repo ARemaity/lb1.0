@@ -8,7 +8,7 @@ $idHour = 0;
 $idDay = 0;
 $idMonth = 0;
 $idPaymemt = 0;
-$getCumumlative=0;
+$getCumumlative = 0;
 header("Content-type: application/json; charset=utf-8");
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
@@ -20,7 +20,9 @@ mysqli_set_charset($conn, "utf8");
 $response = array();
 date_default_timezone_set("Asia/Beirut");
 $dates = date('Y-m-d');
-//////////////////////////
+$currentDay = date('d');
+$currentmonth = date('m');
+ //TODO: THIS IS for cuurent day to check if the value must be interent or no ;
 
 
 //Creating Array for JSON response
@@ -32,37 +34,33 @@ if (isset($_GET['fk_client']) && isset($_GET['val'])) {
 
     $fk_client = $_GET['fk_client'];
     $val = $_GET['val'];
-    $forcum=$val;
+    $forcum = $val;
     // Include data base connect class
 
-    
-    
-    
-    $getdata = mysqli_query($conn, "SELECT value FROM  cumulative  Where fk_id='" . $fk_client . "'");
-    if (mysqli_num_rows($getdata)==0) {
-        $insert= mysqli_query($conn,"INSERT INTO cumulative(fk_id,value)  VALUES ('" . $fk_client . "','" . $val . "')") or die(mysqli_error($conn));
 
+//TODO:SELECT id FROM hour_value where fk_client=1 ORDER BY id DESC LIMIT 1//
+////////////////////////////to insert Cumulative to table cumulative ////////////////////
+    $getdata = mysqli_query($conn, "SELECT value FROM  Cumulative Where fk_id='" . $fk_client . "'");
+    if (mysqli_num_rows($getdata) == 0) {
+        $insert = mysqli_query($conn, "INSERT INTO Cumulative(fk_id,value)  VALUES ('" . $fk_client . "','" . $val . "')") or die(mysqli_error($conn));
+    } else {
+
+        $cum = mysqli_fetch_object($getdata);
+        $getCumumlative  = (int)$cum->value;
+        $forcum = $val + $getCumumlative;
+        $insert = mysqli_query($conn, "UPDATE  Cumulative Set `value`= '" . $forcum . "' Where fk_id='" . $fk_client . "'");
     }
-else{
-       
-    $cum = mysqli_fetch_object($getdata);
-    $getCumumlative  = (int)$cum->value;
-    $forcum=$val+$getCumumlative;
-    $insert= mysqli_query($conn,"UPDATE  cumulative Set `value`= '". $forcum . "' Where fk_id='".$fk_client."'");
-
-
-}
-
+/////////////////////////////////////////// to insert Cumulative to table cumulative////////////////////////////////////////
     //check last id by the query and get it by tranforming it to object 
-    $checkLastid = mysqli_query($conn, "SELECT id FROM hour_value ORDER BY id DESC LIMIT 1 ");
+    $checkLastid = mysqli_query($conn, "SELECT day FROM hour_value Where fk_id='" . $fk_client . "'"." ORDER BY day DESC LIMIT 1");
 
-    if (mysqli_num_rows($checkLastid)==0) {
+    if (mysqli_num_rows($checkLastid) == 0) {
 
         $idHour = 1;
     } else {
         $value = mysqli_fetch_object($checkLastid);
 
-        $idHour = (int)$value->id;
+        $idHour = (int)$value->day;
     }
     $debug = array(
 
@@ -81,17 +79,17 @@ else{
         'API.month' => 0,
 
 
-    );  
+    );
 
     if ($checkLastid) {
         $debug['lasthourQ'] = 1;
-        if ($idHour < 10) {
+        if ($currentDay==$idHour ) {
             //if the id of last auto incremented value 24 or more sum up and insert it to the vlaue of day and reset the id and delete all value
-            $result = mysqli_query($conn, "INSERT INTO hour_value(fk_client,val) VALUES('" . $fk_client . "','" . $val . "')");
+            $result = mysqli_query($conn, "INSERT INTO hour_value(fk_client,val) VALUES('" . $fk_client . "','" . $val. "','" .$currentDay . "')");
             if ($result) {
                 $debug['API.hour'] = 1;
             }
-        } else if ($idHour >= 10) {
+        } else if ($currentDay>$idHour) {
 
             $sumHourQ = mysqli_query($conn, " SELECT SUM(val) as sums FROM hour_value;") or die(mysqli_error($conn));
             $sumHour = mysqli_fetch_object($sumHourQ);
@@ -99,7 +97,7 @@ else{
             if ($sumHourQ) {
 
                 $Lastday = mysqli_query($conn, "SELECT id FROM day_value ORDER BY id DESC LIMIT 1 ");
-                if (mysqli_num_rows($Lastday)==0) {
+                if (mysqli_num_rows($Lastday) == 0) {
 
                     $idDay = 1;
                 } else {
@@ -134,16 +132,15 @@ else{
 
                                     $reset = mysqli_query($conn, "ALTER TABLE `day_value` AUTO_INCREMENT=1");
                                     if ($reset) {
-                                        
-                                        $delete = mysqli_query($conn, "DELETE  FROM  cumulative WHERE fk_id ='".$fk_client."'");
-                                        $cost1kw = "SELECT  `cost_1kw` FROM `supplier` INNER JOIN `client` on  client.fkSupplier = supplier.id  WHERE client.id=". $fk_client ;
-                                          $result= mysqli_query($conn,$cost1kw);
-                                             $cum = mysqli_fetch_object($result);
-                                             $get1kw  = (int)$cum->cost_1kw;
-                                             $total=$get1kw*$fsumDay;
 
-                                            $insertDay = mysqli_query($conn, " INSERT INTO payment(fk_client,consumption,costof1,Total,payment_st,issued_date)  VALUES ('" . $fk_client . "','" . $fsumDay . "','" . $get1kw . "','" . $total . "','0','" . $dates . "')") or die(mysqli_error($conn));
-                                            $debug['API.month'] = 1;
+                                        $delete = mysqli_query($conn, "DELETE  FROM  Cumulative WHERE fk_id ='" . $fk_client . "'");
+                                        $cost1kw = "SELECT  `cost_1kw` FROM `supplier` INNER JOIN `client` on  client.fk_supplier = supplier.id  WHERE id=" . $fk_client;
+                                        $result = mysqli_query($conn, $cost1kw);
+                                        $cum = mysqli_fetch_object($result);
+                                        $get1kw  = (int)$cum->cost_1kw;
+                                        $total = $get1kw * $fsumDay;
+                                        $insertDay = mysqli_query($conn, " INSERT INTO payment(fk_client,balance,payment_st,issued_date)  VALUES ('" . $fk_client . "','" . $total . "','0','" . $dates . "')") or die(mysqli_error($conn));
+                                        $debug['API.month'] = 1;
                                     }
                                 }
                             }

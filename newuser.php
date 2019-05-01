@@ -49,7 +49,10 @@ $fk_supplier=1;
 
  $role=0;
  $insert = mysqli_query($conn, " INSERT INTO person (role,fname,lname,city,street,phone,email)  VALUES ('" . $role . "','" . $fname . "','" . $lname ."','" . $city ."','" . $street ."','" . $phone . "','" . $email ."')");
- $insertClient = mysqli_query($conn, " INSERT INTO client (PID,fkSupplier)  VALUES ('" . $PID . "','" . $fk_supplier ."')");
+    $checkLastid = mysqli_query($conn, "SELECT PID FROM person ORDER BY PID DESC LIMIT 1 ");
+    $value = mysqli_fetch_object($checkLastid);
+     $last = (int)$value->PID;
+ $insertClient = mysqli_query($conn, " INSERT INTO client (id,PID,fkSupplier)  VALUES ('" . $PID . "','" . $last . "','" . $fk_supplier ."')");
 if($insert&&$insertClient){
 
    echo "USER successfull inserted";
